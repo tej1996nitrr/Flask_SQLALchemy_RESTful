@@ -1,0 +1,98 @@
+Q.What is JWT?
+A. Json Web Token used for encoding and securely transmitting info.This info can be verified and trusted because it is digitally signed
+https://jwt.io/introduction/
+
+Q.How is it implemented here?
+
+We are  doing is that with user IDs.(user.py)
+So a user is going to be an entity
+that has a unique identifying number
+and a username and a password.
+The user is going to send us a username and a password,
+and we're going to send them, the client really,
+a JWT and that JWT is going to be the user ID.
+When the client has the JWT
+they can send it to us with any request they make
+and when they do that it's going to tell us
+that they have previously authenticated,
+that means they are logged in.
+
+Q What are Requirements for Encryption?
+
+We need some sort of key for encryption,that is done by
+app.secret_key="ANY_SECRET_KEY".
+For production API,this has to be hidden
+
+Q userid_mapping:
+
+maps user id with the user details. Example:
+userid_mapping={
+1:
+{
+'id':1,
+'username':'harry',
+'password':'potter'}
+}
+in code we are representing as user objects instead of json
+
+Q Authenticate function:
+
+takes username,password
+gets user using user_mapping
+if passwords match, returns userNone as default
+
+Q identity function
+
+extracts userid from payload
+used to retrieve users
+
+Q using jwt in app.py
+
+from secrity.py we import identity , authentication
+jwt creates a new endpoint /auth
+when we call /auth , jwt sends it to authentication function
+after authentication we return user.
+auth endoint return a jwt token
+when we send it to next request ,(the jwt token) jwt calls  identity
+function which then returns the username that was previously authenticated
+
+Q who creates http://127.0.0.1:5000/auth
+
+Jwt extension creates the endpoint by default
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
