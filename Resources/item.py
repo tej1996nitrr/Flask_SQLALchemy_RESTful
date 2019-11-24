@@ -16,6 +16,7 @@ class Item(Resource):
     @jwt_required()
     def get(self, name):
         item = ItemModel.find_by_name(name) #this returns object
+        
         if item:
             return item.json()
         return {'message': 'Item not found'}, 404
@@ -30,7 +31,7 @@ class Item(Resource):
         item = ItemModel( name, data['price'])
 
         try:
-            item.insert()
+            item.save_to_DB()
         except:
             return {"message": "An error occurred inserting the item."},500
 
@@ -40,34 +41,46 @@ class Item(Resource):
 
     @jwt_required()
     def delete(self, name):
-        connection = sqlite3.connect('data.db')
-        cursor = connection.cursor()
+        # connection = sqlite3.connect('data.db')
+        # cursor = connection.cursor()
 
-        query = "DELETE FROM {table} WHERE name=?".format(table=self.TABLE_NAME)
-        cursor.execute(query, (name,))
+        # query = "DELETE FROM {table} WHERE name=?".format(table=self.TABLE_NAME)
+        # cursor.execute(query, (name,))
 
-        connection.commit()
-        connection.close()
+        # connection.commit()
+        # connection.close()
 
-        return {'message': 'Item deleted'}
+        # return {'message': 'Item deleted'}
+        item = ItemModel.find_by_name(name)
+        if item:
+            item.delete_fromdb()
+        return {'message':'Item deleted'}
+         
 
     @jwt_required()
     def put(self, name):
         data = Item.parser.parse_args()
         item = ItemModel.find_by_name(name)
-        updated_item = ItemModel( name, data['price'])
         if item is None:
-            try:
-                updated_item.insert()
-            except:
-                return {"message": "An error occurred inserting the item."}
+            item =ItemModel(name,data['price'])
         else:
-            try:
-                updated_item.update() #this is not item.update() because in SQl query it will update  existing values
-            except:  #if we give item.update() it wont update
-                raise
-                return {"message": "An error occurred updating the item."}
-        return updated_item.json()
+            item.price = data['price']
+        item.save_to_DB()
+        return item.json()
+
+        # updated_item = ItemModel( name, data['price'])
+        # if item is None:
+        #     try:
+        #         updated_item.insert()
+        #     except:
+        #         return {"message": "An error occurred inserting the item."}
+        # else:
+        #     try:
+        #         updated_item.update() #this is not item.update() because in SQl query it will update  existing values
+        #     except:  #if we give item.update() it wont update
+        #         raise
+        #         return {"message": "An error occurred updating the item."}
+        # return updated_item.json()
 
     
 

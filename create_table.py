@@ -9,9 +9,9 @@ cursor = connection.cursor()
 create_table = "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, username text, password text)"
 cursor.execute(create_table)
 
-create_table = "CREATE TABLE IF NOT EXISTS items (name text PRIMARY KEY, price real)" #real=>decimal/float
+create_table = "CREATE TABLE IF NOT EXISTS items (id INTEGER PRIMARY KEY,name text , price real)" #real=>decimal/float
 cursor.execute(create_table)
-cursor.execute("insert into items values('test',10.99)")
+# cursor.execute("insert into items values('test',10.99)")
 connection.commit()
 
 connection.close()

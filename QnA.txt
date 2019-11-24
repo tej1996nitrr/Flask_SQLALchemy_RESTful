@@ -60,11 +60,70 @@ Q who creates http://127.0.0.1:5000/auth
 
 Jwt extension creates the endpoint by default
 
- 
+ 1.Register at http://127.0.0.1:5000/register
+ IN: give user details
+ {
+	
+	"username":"kitten",
+	"password":"1234"
+}
+OUT: user created successfully
 
+2.Authorize at http://127.0.0.1:5000/auth =>gives jwt 
+IN: give details
+{
+	"username":"kitten",
+	"password":"1234"
+	
+}
 
+OUT:we get access token 
+{
+  "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NzQ2MTg1NjEsImlhdCI6MTU3NDYxODI2MSwibmJmIjoxNTc0NjE4MjYxLCJpZGVudGl0eSI6M30.10pWQ2IcFiPpmq8ncntNGaKJ2WlioFCqY2FElUPtl94"
+}
 
+3. create an item 
+at POST http://127.0.0.1:5000/item/glass
+IN: {
+	"price":56
+}
+OUT:
+{
+    "name": "glass",
+    "price": 56.0
+}
 
+4.Get all items at GET http://127.0.0.1:5000/items
+IN:nothing
+OUT:list of all items
+
+5.Get specific item
+IN: in headers: KEY=Authorization VALUE= JWT access_token
+
+OUT: item as json 
+{
+    "name": "bat",
+    "price": 560.0
+}
+
+6.Delete item at DELETE http://127.0.0.1:5000/item/chair
+IN: in headers: KEY=Authorization VALUE= JWT access_token
+OUT:
+{
+    "message": "Item deleted"
+}
+7. update item at PUT http://127.0.0.1:5000/item/bat
+
+IN:
+{
+	"price":20.8
+}
+OUT:
+Item gets updated/created if doesnt exist
+{
+    "name": "bat",
+    "price": 20.8
+}
 
 
 

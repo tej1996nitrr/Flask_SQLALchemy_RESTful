@@ -7,6 +7,8 @@ from Resources.item import Item,ItemList
 
 app=Flask(__name__)
 app.secret_key = 'flask'
+app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///data.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False #turns off the flask_sqlalchemy object tracker off
 api =Api(app)# allows to add resources
 
 jwt = JWT(app,authenticate,identity)
@@ -71,16 +73,13 @@ api.add_resource(ItemList, '/items')
 api.add_resource(UserRegister, '/register')
 
 
-
-
-
-
-
-
-
-
-
-
-
 if __name__=="__main__":
+
+    '''We are importing db here inorder to prevent circular imports
+    
+    Our models, Items,users are going to import db as well if we import db at the top,
+    nd also the models at the top
+    that will create a circular import'''
+    from db import db
+    db.init_app(app)
     app.run(debug=True)
